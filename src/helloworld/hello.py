@@ -5,7 +5,7 @@ class HelloWorld:
     """Simple example class."""
 
     def greet(self) -> str:
-        return "Hello, world!"
+        return "Hello, world! Woo Hoo!"
 
 
 if __name__ == "__main__":
