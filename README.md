@@ -2,6 +2,9 @@
 
 A minimal Python package that prints “Hello, world!” Built and managed with [Poetry](https://python-poetry.org), tested with [pytest](https://docs.pytest.org), and linted with [Black](https://github.com/psf/black), [isort](https://pycqa.github.io/isort/), and [Flake8](https://flake8.pycqa.org).
 
+## Codespace
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=1022198669)
+
 ## Project Structure
 
 ```
@@ -25,11 +28,11 @@ helloworld/
 
 Clone the repo and install dependencies:
 
-\`\`\`bash
+```bash
 git clone https://github.com/<your-username>/helloworld.git
 cd helloworld
 poetry install
-\`\`\`
+```
 
 > This will create a virtual environment and install both runtime and development dependencies.
 
@@ -37,23 +40,23 @@ poetry install
 
 Run the module directly:
 
-\`\`\`bash
+```bash
 poetry run python -m helloworld
-\`\`\`
+```
 
 You should see:
 
-\`\`\`
+```
 Hello, world!
-\`\`\`
+```
 
 ## Running Tests
 
 Execute the full test suite with:
 
-\`\`\`bash
+```bash
 poetry run pytest
-\`\`\`
+```
 
 ## Linting
 
@@ -61,15 +64,15 @@ poetry run pytest
 
 We use [pre-commit](https://pre-commit.com) to auto-format and catch lint issues before each commit. If you haven’t already:
 
-\`\`\`bash
+```bash
 poetry run pre-commit install
-\`\`\`
+```
 
 To run all hooks against all files manually:
 
-\`\`\`bash
+```bash
 poetry run pre-commit run --all-files
-\`\`\`
+```
 
 ### GitHub Actions (CI)
 
