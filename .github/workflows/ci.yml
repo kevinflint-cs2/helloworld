@@ -40,7 +40,6 @@ jobs:
       - name: Lint with Flake8
         run: poetry run flake8 .
 
-
       # run your test suite
       - name: Run pytest
         run: poetry run pytest
