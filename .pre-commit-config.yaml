@@ -15,3 +15,12 @@ repos:
     rev: 6.1.0
     hooks:
       - id: flake8
+
+  - repo: local
+    hooks:
+      - id: pytest
+        name: Run pytest via Poetry
+        entry: poetry run pytest --cache-clear --maxfail=1 --disable-warnings
+        language: system
+        pass_filenames: false
+        always_run: true
