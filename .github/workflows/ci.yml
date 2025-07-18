@@ -14,22 +14,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) check out your code
+      # check out your code
       - uses: actions/checkout@v3
 
-      # 2) set up Python
+      # set up Python
       - uses: actions/setup-python@v4
         with:
           python-version: "3.x"
 
-      # 3) install Poetry
+      # install Poetry
       - name: Install Poetry
         run: pip install poetry
 
-      # 4) install all dependencies (including dev)
+      # install all dependencies (including dev)
       - name: Install dependencies
         run: poetry install
 
-      # 5) run your test suite
+      # Linting steps
+      - name: Lint with Black
+        run: poetry run black --check .
+
+      - name: Lint with isort
+        run: poetry run isort --check .
+
+      - name: Lint with Flake8
+        run: poetry run flake8 .
+
+
+      # run your test suite
       - name: Run pytest
         run: poetry run pytest
