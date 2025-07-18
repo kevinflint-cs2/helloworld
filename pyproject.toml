@@ -3,7 +3,7 @@ name = "helloworld"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Flint, Kevin (HQP)",email = "kevin.flint@roberthalf.com"}
+    {name = "Flint, Kevin",email = "kevin.flint@cybersecuritysquared.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.13"
@@ -13,9 +13,23 @@ dependencies = [
 [tool.poetry]
 packages = [{include = "helloworld", from = "src"}]
 
+[tool.black]
+line-length = 88
+target-version = ["py313"]    # adjust to your minimum supported Python
+
+[tool.isort]
+profile = "black"
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
+black = "^25.1.0"
+isort = "^6.0.1"
+flake8 = "^7.3.0"
+pre-commit = "^4.2.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
