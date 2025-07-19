@@ -29,7 +29,7 @@ helloworld/
 Clone the repo and install dependencies:
 
 ```bash
-git clone https://github.com/<your-username>/helloworld.git
+git clone https://github.com/kevinflint-cs2/helloworld.git
 cd helloworld
 poetry install
 ```
