@@ -1,47 +1,39 @@
 from pathlib import Path
 
 from dotenv import load_dotenv
-from invoke import Collection, task
+from invoke import Collection, Context, task
 
 # load .env from project root
 project_root = Path(__file__).parent
 load_dotenv(project_root / ".env")
 
-msg_help_bump = "Which part to bump: 'patch', 'minor', or 'major' (default: patch)"
 
-
-@task(help={"level": msg_help_bump})
-def bump(c, level="patch"):
+@task  # type: ignore[misc]
+def bandit(c: Context) -> None:
     """
-    Bump the project version (pyproject.toml), commit, tag, and push.
+    Run Bandit security scan over your source.
 
-    Usage:
-      invoke bump           # does a patch bump
-      invoke bump --level=minor
-      invoke bump --level=major
+    Usage: invoke bandit
     """
-    # 1) bump version in pyproject.toml and capture the new version
-    result = c.run(f"poetry version {level}", hide="both")
-    new_version = result.stdout.strip()
-    print(f"📦 Bumped version to {new_version}")
-
-    # 2) commit the change
-    run_git_commit = f'git commit -m "chore(release): bump version to {new_version}"'
-    c.run("git add pyproject.toml", pty=True)
-    c.run(run_git_commit, pty=True)
-
-    # 3) create the tag
-    c.run(f"git tag v{new_version}", pty=True)
-
-    # 4) push commit & tags
-    c.run("git push --follow-tags", pty=True)
-    print("🚀 Pushed commit and tags to origin")
+    c.run("poetry run bandit -r src/helloworld -c bandit.yml", pty=True)
 
 
-@task
-def fmt(c):
+@task  # type: ignore[misc]
+def docstyle(c: Context) -> None:
+    """
+    Run pydocstyle to enforce docstring conventions.
+
+    Usage: invoke docstyle
+    """
+    # point at your source (and tests if you like)
+    c.run("poetry run pydocstyle src/helloworld tests", pty=True)
+
+
+@task  # type: ignore[misc]
+def fmt(c: Context) -> None:
     """
     Auto‑format code: reorder imports with isort and apply Black formatting.
+
     Usage: invoke fmt
     """
     # reorder imports in place
@@ -50,10 +42,11 @@ def fmt(c):
     c.run("poetry run black .", pty=True)
 
 
-@task
-def lint(c):
+@task  # type: ignore[misc]
+def lint(c: Context) -> None:
     """
     Run all lint checks: Black, isort, and Flake8 (ignoring E501).
+
     Usage: invoke lint
     """
     # Black in check‐only mode (won’t reformat)
@@ -64,10 +57,11 @@ def lint(c):
     c.run("poetry run flake8 . --ignore=E501", pty=True)
 
 
-@task
-def sync(c):
+@task  # type: ignore[misc]
+def sync(c: Context) -> None:
     """
     Fully sync local main branch to origin/main, discarding all local changes.
+
     Usage: invoke sync
     """
     # ensure we’re on main
@@ -80,19 +74,21 @@ def sync(c):
     c.run("git clean -fd", pty=True)
 
 
-@task
-def test(c):
+@task  # type: ignore[misc]
+def test(c: Context) -> None:
     """
     Run the full pytest suite.
+
     Usage: invoke test
     """
     c.run("poetry run pytest", pty=True)
 
 
-@task
-def typecheck(c):
+@task  # type: ignore[misc]
+def typecheck(c: Context) -> None:
     """
     Run MyPy static type checks.
+
     Usage: invoke typecheck
     """
     # Point at your source package directory (adjust as needed)
@@ -101,7 +97,8 @@ def typecheck(c):
 
 # Create a namespace and add tasks
 ns = Collection()
-ns.add_task(bump)
+ns.add_task(bandit)
+ns.add_task(docstyle)
 ns.add_task(fmt)
 ns.add_task(lint)
 ns.add_task(sync)
@@ -109,10 +106,27 @@ ns.add_task(test)
 ns.add_task(typecheck)
 
 
-@task(default=True)
-def help(c):
+@task(
+    pre=[fmt, lint, typecheck, docstyle, test, bandit],
+)  # type: ignore[misc]
+def ci(c: Context) -> None:
     """
-    Show available tasks
+    Run all CI tasks in order: fmt, lint, typecheck, docstyle, test, bandit.
+
+    Usage: invoke ci
+    """
+    print("🎉 All CI tasks completed successfully!")
+
+
+ns.add_task(ci)
+
+
+@task(default=True)  # type: ignore[misc]
+def help(c: Context) -> None:
+    """
+    Show available tasks.
+
+    Usage: invoke help
     """
     print("Available tasks:\n")
     for name, task_obj in ns.tasks.items():

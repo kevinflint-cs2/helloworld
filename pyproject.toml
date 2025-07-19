@@ -32,7 +32,13 @@ addopts = "-v --showlocals --disable-warnings"
 files = ["src/helloworld", "tests"]
 ignore_missing_imports = true
 python_version = "3.13"
-strict = false   # flip to true once you’ve cleaned up your code
+strict = true   # flip to true once you’ve cleaned up your code
+
+[tool.pydocstyle]
+# which conventions to check, e.g. google, numpy, pep257
+convention = "numpy"
+# codes to ignore
+add-ignore = ["D100", "D104"]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
@@ -43,6 +49,8 @@ pre-commit = "^4.2.0"
 invoke = "^2.2.0"
 python-dotenv = "^1.1.1"
 mypy = "^1.17.0"
+pydocstyle = "^6.3.0"
+bandit = "^1.8.6"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

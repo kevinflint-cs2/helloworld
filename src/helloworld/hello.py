@@ -2,14 +2,10 @@
 
 
 class HelloWorld:
-    """
-    A simple HelloWorld class that can return greetings.
-    """
+    """A simple HelloWorld class that can return greetings."""
 
     def __init__(self) -> None:
-        """
-        Initialize a new HelloWorld instance.
-        """
+        """Initialize a new HelloWorld instance."""
         pass
 
     def greet(self, name: str = "nobody") -> str:
@@ -19,8 +15,9 @@ class HelloWorld:
         Args:
             name (str): The name of the person to greet. Defaults to 'nobody'.
 
-        Returns:
-            str: A greeting string, e.g., 'Hello Alice'.
+        Returns
+        -------
+        str: A greeting string, e.g., 'Hello Alice'.
         """
         self.name = name
         return f"Hello {self.name}"
@@ -29,7 +26,8 @@ class HelloWorld:
         """
         Return the classic "Hello, world!" message.
 
-        Returns:
+        Returns
+        -------
             str: The string "Hello, world!!".
         """
         return "Hello, world!!"
