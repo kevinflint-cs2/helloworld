@@ -1,4 +1,48 @@
+from pathlib import Path
+
+from dotenv import load_dotenv
 from invoke import Collection, task
+
+# load .env from project root
+project_root = Path(__file__).parent
+load_dotenv(project_root / ".env")
+
+
+@task
+def bump(c):
+    """
+    Determine next version, update pyproject.toml & CHANGELOG, commit & tag.
+    Usage: invoke bump
+    """
+    c.run("poetry run semantic-release version", pty=True)
+
+
+@task(bump)
+def build(c):
+    """
+    Build sdist and wheel for the newly bumped version.
+    Usage: invoke build
+    """
+    c.run("poetry build", pty=True)
+
+
+@task(build)
+def publish(c):
+    """
+    Push commits & tags, create GitHub Release, and upload dists.
+    Usage: invoke publish
+    """
+    c.run("poetry run semantic-release publish", pty=True)
+
+
+@task
+def version(c):
+    """
+    Run semantic‑release in no‐op mode to show the next version.
+    Usage: invoke version
+    """
+    # now GH_TOKEN is loaded from .env
+    c.run("poetry run semantic-release --noop version --print", pty=True)
 
 
 @task
@@ -28,8 +72,6 @@ def lint(c):
 
 
 # … rest of your tasks/namespace setup …
-
-
 @task
 def test(c):
     """
@@ -41,6 +83,9 @@ def test(c):
 
 # Create a namespace and add tasks
 ns = Collection()
+ns.add_task(version)
+ns.add_task(bump)
+ns.add_task(publish)
 ns.add_task(fmt)
 ns.add_task(lint)
 ns.add_task(test)
