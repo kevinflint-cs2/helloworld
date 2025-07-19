@@ -16,8 +16,8 @@ repos:
     rev: 6.1.0
     hooks:
       - id: flake8
-        # no args needed—flake8 only reports errors, it doesn’t modify files
-
+        args:
+          - --ignore=E501
 
   - repo: local
     hooks:

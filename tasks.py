@@ -64,7 +64,22 @@ def lint(c):
     c.run("poetry run flake8 . --ignore=E501", pty=True)
 
 
-# … rest of your tasks/namespace setup …
+@task
+def sync(c):
+    """
+    Fully sync local main branch to origin/main, discarding all local changes.
+    Usage: invoke sync
+    """
+    # ensure we’re on main
+    c.run("git checkout main", pty=True)
+    # fetch + prune deleted remotes
+    c.run("git fetch origin --prune", pty=True)
+    # hard reset to remote state
+    c.run("git reset --hard origin/main", pty=True)
+    # remove untracked files and dirs
+    c.run("git clean -fd", pty=True)
+
+
 @task
 def test(c):
     """
@@ -79,6 +94,7 @@ ns = Collection()
 ns.add_task(bump)
 ns.add_task(fmt)
 ns.add_task(lint)
+ns.add_task(sync)
 ns.add_task(test)
 
 
