@@ -9,6 +9,16 @@ load_dotenv(project_root / ".env")
 
 
 @task  # type: ignore[misc]
+def bandit(c: Context) -> None:
+    """
+    Run Bandit security scan over your source.
+
+    Usage: invoke bandit
+    """
+    c.run("poetry run bandit -r src/helloworld -c bandit.yml", pty=True)
+
+
+@task  # type: ignore[misc]
 def docstyle(c: Context) -> None:
     """
     Run pydocstyle to enforce docstring conventions.
@@ -87,12 +97,28 @@ def typecheck(c: Context) -> None:
 
 # Create a namespace and add tasks
 ns = Collection()
+ns.add_task(bandit)
 ns.add_task(docstyle)
 ns.add_task(fmt)
 ns.add_task(lint)
 ns.add_task(sync)
 ns.add_task(test)
 ns.add_task(typecheck)
+
+
+@task(
+    pre=[fmt, lint, typecheck, docstyle, test, bandit],
+)  # type: ignore[misc]
+def ci(c: Context) -> None:
+    """
+    Run all CI tasks in order: fmt, lint, typecheck, docstyle, test, bandit.
+
+    Usage: invoke ci
+    """
+    print("🎉 All CI tasks completed successfully!")
+
+
+ns.add_task(ci)
 
 
 @task(default=True)  # type: ignore[misc]

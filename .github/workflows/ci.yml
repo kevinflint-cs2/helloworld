@@ -45,3 +45,6 @@ jobs:
 
       - name: Run pytest
         run: poetry run pytest
+
+      - name: Security scan with Bandit
+        run: poetry run bandit -r src/helloworld -c bandit.yml
