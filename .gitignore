@@ -1,0 +1,21 @@
+# Byte‑compiled / caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# IDE files
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
