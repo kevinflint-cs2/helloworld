@@ -1,0 +1,29 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 23.9.1
+    hooks:
+      - id: black
+        args: ["--check", "--diff"]       # ← add these
+        language_version: python3
+
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        args: ["--profile=black", "--check", "--diff"]  # ← add these
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8
+        # no args needed—flake8 only reports errors, it doesn’t modify files
+
+
+  - repo: local
+    hooks:
+      - id: pytest
+        name: Run pytest via Poetry
+        entry: poetry run pytest --cache-clear --maxfail=1 --disable-warnings
+        language: system
+        pass_filenames: false
+        always_run: true

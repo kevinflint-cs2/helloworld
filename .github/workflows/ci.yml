@@ -1,0 +1,45 @@
+name: CI
+
+# run on every push or PR to any branch
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # check out your code
+      - uses: actions/checkout@v3
+
+      # set up Python
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+
+      # install Poetry
+      - name: Install Poetry
+        run: pip install poetry
+
+      # install all dependencies (including dev)
+      - name: Install dependencies
+        run: poetry install
+
+      # Linting steps
+      - name: Lint with Black
+        run: poetry run black --check .
+
+      - name: Lint with isort
+        run: poetry run isort --check .
+
+      - name: Lint with Flake8
+        run: poetry run flake8 .
+
+      # run your test suite
+      - name: Run pytest
+        run: poetry run pytest
