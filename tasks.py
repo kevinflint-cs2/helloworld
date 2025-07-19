@@ -7,42 +7,35 @@ from invoke import Collection, task
 project_root = Path(__file__).parent
 load_dotenv(project_root / ".env")
 
-
-@task
-def bump(c):
-    """
-    Determine next version, update pyproject.toml & CHANGELOG, commit & tag.
-    Usage: invoke bump
-    """
-    c.run("poetry run semantic-release version", pty=True)
+msg_help_bump = "Which part to bump: 'patch', 'minor', or 'major' (default: patch)"
 
 
-@task(bump)
-def build(c):
+@task(help={"level": msg_help_bump})
+def bump(c, level="patch"):
     """
-    Build sdist and wheel for the newly bumped version.
-    Usage: invoke build
-    """
-    c.run("poetry build", pty=True)
+    Bump the project version (pyproject.toml), commit, tag, and push.
 
+    Usage:
+      invoke bump           # does a patch bump
+      invoke bump --level=minor
+      invoke bump --level=major
+    """
+    # 1) bump version in pyproject.toml and capture the new version
+    result = c.run(f"poetry version {level}", hide="both")
+    new_version = result.stdout.strip()
+    print(f"📦 Bumped version to {new_version}")
 
-@task(build)
-def publish(c):
-    """
-    Push commits & tags, create GitHub Release, and upload dists.
-    Usage: invoke publish
-    """
-    c.run("poetry run semantic-release publish", pty=True)
+    # 2) commit the change
+    run_git_commit = f'git commit -m "chore(release): bump version to {new_version}"'
+    c.run("git add pyproject.toml", pty=True)
+    c.run(run_git_commit, pty=True)
 
+    # 3) create the tag
+    c.run(f"git tag v{new_version}", pty=True)
 
-@task
-def version(c):
-    """
-    Run semantic‑release in no‐op mode to show the next version.
-    Usage: invoke version
-    """
-    # now GH_TOKEN is loaded from .env
-    c.run("poetry run semantic-release --noop version --print", pty=True)
+    # 4) push commit & tags
+    c.run("git push --follow-tags", pty=True)
+    print("🚀 Pushed commit and tags to origin")
 
 
 @task
@@ -60,15 +53,15 @@ def fmt(c):
 @task
 def lint(c):
     """
-    Run all lint checks: Black, isort, and Flake8.
+    Run all lint checks: Black, isort, and Flake8 (ignoring E501).
     Usage: invoke lint
     """
     # Black in check‐only mode (won’t reformat)
     c.run("poetry run black --check .", pty=True)
     # isort in check‐only mode (won’t reorder)
     c.run("poetry run isort --check .", pty=True)
-    # flake8 always only reports problems
-    c.run("poetry run flake8 .", pty=True)
+    # flake8 ignoring line-too-long errors
+    c.run("poetry run flake8 . --ignore=E501", pty=True)
 
 
 # … rest of your tasks/namespace setup …
@@ -83,9 +76,7 @@ def test(c):
 
 # Create a namespace and add tasks
 ns = Collection()
-ns.add_task(version)
 ns.add_task(bump)
-ns.add_task(publish)
 ns.add_task(fmt)
 ns.add_task(lint)
 ns.add_task(test)

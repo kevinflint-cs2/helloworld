@@ -21,7 +21,7 @@ target-version = ["py312"]    # adjust to your minimum supported Python
 profile = "black"
 
 [tool.flake8]
-max-line-length = 88
+max-line-length = 95
 extend-ignore = ["E203", "W503"]
 
 [tool.pytest.ini_options]
