@@ -40,6 +40,9 @@ jobs:
       - name: Lint with Flake8
         run: poetry run flake8 . --ignore=E501
 
+      - name: Type check with MyPy
+        run: poetry run mypy src/helloworld tests
+
       # run your test suite
       - name: Run pytest
         run: poetry run pytest

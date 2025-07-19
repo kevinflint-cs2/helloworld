@@ -3,6 +3,7 @@ repos:
     rev: 23.9.1
     hooks:
       - id: black
+        name: Linting using black
         args: ["--check", "--diff"]       # ← add these
         language_version: python3
 
@@ -10,14 +11,24 @@ repos:
     rev: 5.12.0
     hooks:
       - id: isort
+        name: Linting using isort
         args: ["--profile=black", "--check", "--diff"]  # ← add these
 
   - repo: https://github.com/PyCQA/flake8
     rev: 6.1.0
     hooks:
       - id: flake8
+        name: Linting using flake8
         args:
           - --ignore=E501
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.17.0       # pick the version matching your Poetry dev-dependency
+    hooks:
+      - id: mypy
+        name: Type checking using mypy
+        args:
+          - --ignore-missing-imports
 
   - repo: local
     hooks:
