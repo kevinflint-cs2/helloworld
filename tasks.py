@@ -89,6 +89,16 @@ def test(c):
     c.run("poetry run pytest", pty=True)
 
 
+@task
+def typecheck(c):
+    """
+    Run MyPy static type checks.
+    Usage: invoke typecheck
+    """
+    # Point at your source package directory (adjust as needed)
+    c.run("poetry run mypy src/helloworld tests", pty=True)
+
+
 # Create a namespace and add tasks
 ns = Collection()
 ns.add_task(bump)
@@ -96,6 +106,7 @@ ns.add_task(fmt)
 ns.add_task(lint)
 ns.add_task(sync)
 ns.add_task(test)
+ns.add_task(typecheck)
 
 
 @task(default=True)

@@ -19,6 +19,13 @@ repos:
         args:
           - --ignore=E501
 
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.17.0       # pick the version matching your Poetry dev-dependency
+    hooks:
+      - id: mypy
+        args:
+          - --ignore-missing-imports
+
   - repo: local
     hooks:
       - id: pytest

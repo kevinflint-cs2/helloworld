@@ -27,6 +27,13 @@ extend-ignore = ["E203", "W503"]
 [tool.pytest.ini_options]
 addopts = "-v --showlocals --disable-warnings"
 
+[tool.mypy]
+# paths to check; adjust if your code lives elsewhere
+files = ["src/helloworld", "tests"]
+ignore_missing_imports = true
+python_version = "3.13"
+strict = false   # flip to true once you’ve cleaned up your code
+
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
 black = "^25.1.0"
@@ -35,6 +42,7 @@ flake8 = "^7.3.0"
 pre-commit = "^4.2.0"
 invoke = "^2.2.0"
 python-dotenv = "^1.1.1"
+mypy = "^1.17.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
