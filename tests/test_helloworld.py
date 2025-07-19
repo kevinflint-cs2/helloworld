@@ -10,7 +10,9 @@ def test_hello():
     """
     hw = HelloWorld()
     result = hw.hello()
-    assert result == "Hello, world!", f"hello() returned {result!r}"
+    expected = "Hello, world!!"
+    msg = f"hello() returned {result!r}, " f"expected {expected!r}"
+    assert result == expected, msg
 
 
 def test_greet():

@@ -30,9 +30,9 @@ class HelloWorld:
         Return the classic "Hello, world!" message.
 
         Returns:
-            str: The string "Hello, world!".
+            str: The string "Hello, world!!".
         """
-        return "Hello, world!"
+        return "Hello, world!!"
 
 
 if __name__ == "__main__":
