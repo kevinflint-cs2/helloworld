@@ -3,7 +3,7 @@
 from helloworld.hello import HelloWorld
 
 
-def test_hello():
+def test_hello() -> None:
     """
     hello() should return the classic
     'Hello, world!' greeting with punctuation.
@@ -15,7 +15,7 @@ def test_hello():
     assert result == expected, msg
 
 
-def test_greet():
+def test_greet() -> None:
     """
     greet() should default to 'nobody' when no name is passed.
     """

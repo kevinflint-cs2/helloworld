@@ -30,6 +30,11 @@ repos:
         args:
           - --ignore-missing-imports
 
+  - repo: https://github.com/PyCQA/pydocstyle
+    rev: 6.3.0        # match the version in your pyproject.toml
+    hooks:
+      - id: pydocstyle
+
   - repo: local
     hooks:
       - id: pytest

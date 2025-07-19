@@ -22,15 +22,12 @@ jobs:
         with:
           python-version: "3.13"
 
-      # install Poetry
       - name: Install Poetry
         run: pip install poetry
 
-      # install all dependencies (including dev)
       - name: Install dependencies
         run: poetry install
 
-      # Linting steps
       - name: Lint with Black
         run: poetry run black --check .
 
@@ -43,6 +40,8 @@ jobs:
       - name: Type check with MyPy
         run: poetry run mypy src/helloworld tests
 
-      # run your test suite
+      - name: Docstring lint (pydocstyle)
+        run: poetry run pydocstyle src/helloworld tests
+
       - name: Run pytest
         run: poetry run pytest
