@@ -30,6 +30,9 @@ upload_to_pypi = false          # set to true if you want to publish
 branch = "main"                 # branch to publish from
 status_header = true            # include summary header in CHANGELOG
 
+[tool.pytest.ini_options]
+addopts = "-v --showlocals --disable-warnings"
+
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
 black = "^25.1.0"

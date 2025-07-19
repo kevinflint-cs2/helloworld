@@ -2,17 +2,32 @@ from invoke import Collection, task
 
 
 @task
+def fmt(c):
+    """
+    Auto‑format code: reorder imports with isort and apply Black formatting.
+    Usage: invoke fmt
+    """
+    # reorder imports in place
+    c.run("poetry run isort .", pty=True)
+    # format code with Black
+    c.run("poetry run black .", pty=True)
+
+
+@task
 def lint(c):
     """
     Run all lint checks: Black, isort, and Flake8.
     Usage: invoke lint
     """
-    # Black (check-only)
-    c.run("poetry run black .", pty=True)
-    # isort (check-only)
-    c.run("poetry run isort .", pty=True)
-    # Flake8
+    # Black in check‐only mode (won’t reformat)
+    c.run("poetry run black --check .", pty=True)
+    # isort in check‐only mode (won’t reorder)
+    c.run("poetry run isort --check .", pty=True)
+    # flake8 always only reports problems
     c.run("poetry run flake8 .", pty=True)
+
+
+# … rest of your tasks/namespace setup …
 
 
 @task
@@ -26,6 +41,7 @@ def test(c):
 
 # Create a namespace and add tasks
 ns = Collection()
+ns.add_task(fmt)
 ns.add_task(lint)
 ns.add_task(test)
 
