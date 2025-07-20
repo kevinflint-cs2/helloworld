@@ -18,6 +18,36 @@ def bandit(c: Context) -> None:
     c.run("poetry run bandit -r src/helloworld -c bandit.yml", pty=True)
 
 
+@task(help={"level": "Which part to bump: patch, minor, or major"})  # type: ignore[misc]
+def bump(c: Context, level: str = "patch") -> None:
+    """
+    Bump version with Poetry, commit, tag, and push to GitHub.
+
+    Usage:
+      invoke release          # patch bump
+      invoke release --level=minor
+      invoke release --level=major
+    """
+    # 1) bump version in pyproject.toml
+    result = c.run(f"poetry version {level}", hide="both")
+    new_version = result.stdout.strip()
+
+    # 2) stage all changes
+    c.run("git add .", pty=True)
+
+    # 3) commit with conventional message
+    c.run(f'git commit -m "chore(release): bump version to {new_version}"', pty=True)
+
+    # 4) create the Git tag
+    c.run(f"git tag v{new_version}", pty=True)
+
+    # 5) push the tag only
+    c.run(f"git push origin v{new_version}", pty=True)
+
+    # 6) push commit and any remaining tags
+    c.run("git push --follow-tags", pty=True)
+
+
 @task  # type: ignore[misc]
 def docstyle(c: Context) -> None:
     """
@@ -98,6 +128,7 @@ def typecheck(c: Context) -> None:
 # Create a namespace and add tasks
 ns = Collection()
 ns.add_task(bandit)
+ns.add_task(bump)
 ns.add_task(docstyle)
 ns.add_task(fmt)
 ns.add_task(lint)
