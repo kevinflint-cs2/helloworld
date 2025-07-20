@@ -1,7 +1,11 @@
 version: 2
 updates:
   - package-ecosystem: "python"
-    directory: "/"                  # Location of pyproject.toml
+    directory: "/"
     schedule:
-      interval: "weekly"            # or "daily", "monthly"
-    open-pull-requests-limit: 5     # max open PRs at once
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    automerge: true          # auto-merge when CI passes
+    # only allow auto-merge for patch or security updates:
+    automerge-type: "pr"
+    security-updates: true
