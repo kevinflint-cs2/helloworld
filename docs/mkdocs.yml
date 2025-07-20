@@ -1,0 +1,18 @@
+site_name: HelloWorld
+site_url: https://github.com/kevinflint-cs2/helloworld
+theme:
+  name: material
+
+plugins:
+  - search            # built‑in
+  - mkdocstrings:
+      handlers:
+        python:
+          # where to find your code
+          paths:
+            - src
+
+nav:
+  - Home: index.md
+  - API Reference:
+      - HelloWorld: api/helloworld.md

@@ -49,6 +49,26 @@ def bump(c: Context, level: str = "patch") -> None:
 
 
 @task  # type: ignore[misc]
+def docs(c: Context) -> None:
+    """
+    Build the MkDocs site locally.
+
+    Usage: invoke docs
+    """
+    c.run("poetry run mkdocs build", pty=True)
+
+
+@task  # type: ignore[misc]
+def docs_serve(c: Context) -> None:
+    """
+    Serve MkDocs locally with live reload.
+
+    Usage: invoke docs-serve
+    """
+    c.run("poetry run mkdocs serve --config-file ./docs/mkdocs.yml", pty=True)
+
+
+@task  # type: ignore[misc]
 def docstyle(c: Context) -> None:
     """
     Run pydocstyle to enforce docstring conventions.
@@ -129,6 +149,8 @@ def typecheck(c: Context) -> None:
 ns = Collection()
 ns.add_task(bandit)
 ns.add_task(bump)
+ns.add_task(docs)
+ns.add_task(docs_serve)
 ns.add_task(docstyle)
 ns.add_task(fmt)
 ns.add_task(lint)

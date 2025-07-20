@@ -97,3 +97,31 @@ jobs:
 
       - name: Bandit
         run: poetry run bandit -r src/helloworld -c bandit.yml
+
+  docs:
+    name: Docs build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with: python-version: "3.x"
+      - run: pip install poetry
+      - run: poetry install
+      - name: Build Documentation
+        run: poetry run mkdocs build --strict
+        
+  deploy-docs:
+    name: Deploy Docs
+    needs: docs
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+      - run: pip install poetry
+      - run: poetry install
+      - name: Deploy to GitHub Pages
+        run: poetry run mkdocs gh-deploy --force
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -44,3 +44,12 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
+
+  - repo: local
+    hooks:
+      - id: mkdocs-build
+        name: Build documentation
+        entry: poetry run mkdocs build --strict --config-file ./docs/mkdocs.yml
+        language: system
+        pass_filenames: false
+        always_run: true
