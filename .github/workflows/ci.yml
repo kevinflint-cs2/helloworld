@@ -127,6 +127,6 @@ jobs:
       - run: pip install poetry
       - run: poetry install
       - name: Deploy to GitHub Pages
-        run: poetry run mkdocs gh-deploy --force
+        run: poetry run mkdocs gh-deploy --force --config-file ./docs/mkdocs.yml
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
