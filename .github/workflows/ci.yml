@@ -143,4 +143,3 @@ jobs:
           poetry run mkdocs gh-deploy \
             --force \
             --config-file docs/mkdocs.yml
-        # GH_TOKEN is already embedded in the remote URL
