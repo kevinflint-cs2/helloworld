@@ -1,6 +1,5 @@
 name: CI
 
-# run on every push or PR to any branch
 on:
   push:
     branches:
@@ -10,15 +9,14 @@ on:
       - "**"
 
 jobs:
-  test:
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
-
     steps:
-      # check out your code
       - uses: actions/checkout@v3
 
-      # set up Python
-      - uses: actions/setup-python@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
           python-version: "3.13"
 
@@ -28,23 +26,74 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      - name: Lint with Black
+      - name: Black check
         run: poetry run black --check .
 
-      - name: Lint with isort
+      - name: isort check
         run: poetry run isort --check .
 
-      - name: Lint with Flake8
+      - name: Flake8 check
         run: poetry run flake8 . --ignore=E501
 
-      - name: Type check with MyPy
-        run: poetry run mypy src/helloworld tests
-
-      - name: Docstring lint (pydocstyle)
+      - name: Docstring style (pydocstyle)
         run: poetry run pydocstyle src/helloworld tests
 
-      - name: Run pytest
+  type-check:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: MyPy
+        run: poetry run mypy src/helloworld tests
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Pytest
         run: poetry run pytest
 
-      - name: Security scan with Bandit
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Bandit
         run: poetry run bandit -r src/helloworld -c bandit.yml
