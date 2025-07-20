@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "python"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    automerge: true          # auto-merge when CI passes
+    # only allow auto-merge for patch or security updates:
+    automerge-type: "pr"
+    security-updates: true
