@@ -6,7 +6,7 @@ authors = [
     {name = "Flint, Kevin",email = "kevin.flint@cybersecuritysquared.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.13,<4.0"
 dependencies = [
 ]
 
@@ -40,6 +40,14 @@ convention = "numpy"
 # codes to ignore
 add-ignore = ["D100", "D104"]
 
+[tool.semantic_release]
+version_source = "tag"
+version_variable = "helloworld/__init__.py:__version__"
+commit_version_number = true
+upload_to_pypi = false
+build_command = "poetry build"
+changelog_file = "CHANGELOG.md"
+
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
 black = "^25.1.0"
@@ -54,7 +62,17 @@ bandit = "^1.8.6"
 mkdocs = "^1.6.1"
 mkdocs-material = "^9.6.15"
 mkdocstrings = {extras = ["python"], version = "^0.29.1"}
+python-semantic-release = "^10.2.0"
+commitizen = "^4.8.3"
 
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "v$version"
+version_scheme = "pep440"
+version_provider = "poetry"
+update_changelog_on_bump = true
+major_version_zero = true
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
