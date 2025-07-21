@@ -55,7 +55,7 @@ def docs(c: Context) -> None:
 
     Usage: invoke docs
     """
-    c.run("poetry run mkdocs build", pty=True)
+    c.run("poetry run mkdocs build --config-file ./docs/mkdocs.yml", pty=True)
 
 
 @task  # type: ignore[misc]
@@ -160,7 +160,7 @@ ns.add_task(typecheck)
 
 
 @task(
-    pre=[fmt, lint, typecheck, docstyle, test, bandit],
+    pre=[fmt, lint, typecheck, docstyle, test, bandit, docs],
 )  # type: ignore[misc]
 def ci(c: Context) -> None:
     """
